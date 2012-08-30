@@ -32,7 +32,7 @@ module WigleApi
   end
 end
 
-# How to use:
+# How to use the web scraper (will only return 100 results):
 # WigleApi.login("myusername", "mypassword")
 # @results = WigleApi.where(ssid: "linksys").results
 

@@ -18,6 +18,7 @@
   paynet      - Must be a Commercial Pay Net (Not sure what that means either...), same deal with on to filter with this
   dhcp        - Must have DHCP enable, on again to filter with this...
   onlymine    - Only search on the networks that the authenticated user has found
+  pagestart   - The search result offset
   Query       - This is the submit button...
 =end
 
@@ -26,17 +27,7 @@ module WigleApi
     class Search
       def initialize(args)
         @search_arguments = {
-          "addresscode" => "",
-          "statecode"   => "",
-          "zipcode"     => "",
           "variance"    => "0.010",
-          "latrange1"   => "",
-          "latrange2"   => "",
-          "longrange1"  => "",
-          "longrange2"  => "",
-          "lastupdt"    => "",
-          "netid"       => "",
-          "ssid"        => "",
           "Query"       => "Query"
         }
 
@@ -66,6 +57,11 @@ module WigleApi
       private
 
       def clean(options)
+        options = options.inject({}) do |opt, (key, value)|
+          opt[key.to_s] = value.to_s
+          opt
+        end
+
         options.delete_if { |k,v| !valid_keys.include?(k) }
       end
 
