@@ -34,6 +34,11 @@ module WigleApi
         @search_arguments.merge!(clean(args))
       end
 
+      def offset(num)
+        @search_arguments.merge!(clean({pagestart: num}))
+        self
+      end
+
       def where(args)
         @search_arguments.merge!(clean(args))
         self
@@ -47,7 +52,11 @@ module WigleApi
           return nil
         end
 
-        WigleApi::Scraper::Parser.new(response.body)
+        # Parse the response, then turn the keys into symbols
+        WigleApi::Scraper::Parser.new(response.body).inject({}) do |results, (key, value)|
+          results[key.to_sym] = value.to_s
+          results
+        end
       end
 
       def each
@@ -82,7 +91,7 @@ module WigleApi
           "paynet",
           "dhcp",
           "onlymine",
-          "Query"
+          "pagestart",
         ]
       end
     end
