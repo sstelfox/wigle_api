@@ -21,7 +21,9 @@ Gem::Specification.new do |gem|
   gem.executables       = gem.files.grep(%r{^bin/}).map { |f| File.basename(f) }
   gem.require_paths     = ["lib"]
 
-  gem.add_dependency "nokogiri"
+  gem.add_runtime_dependency "nokogiri"
   gem.add_development_dependency "rspec"
+
+  spec.required_ruby_version = '>= 1.9.2'
 end
 
