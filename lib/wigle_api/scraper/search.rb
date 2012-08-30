@@ -53,9 +53,11 @@ module WigleApi
         end
 
         # Parse the response, then turn the keys into symbols
-        WigleApi::Scraper::Parser.new(response.body).inject({}) do |results, (key, value)|
-          results[key.to_sym] = value.to_s
-          results
+        WigleApi::Scraper::Parser.new(response.body).map do |row|
+          row.inject({}) do |results, (key, value)|
+            results[key.to_sym] = value.to_s
+            results
+          end
         end
       end
 
