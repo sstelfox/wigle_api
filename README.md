@@ -5,7 +5,7 @@ This gem was written to make use of WiGLE.net's wireless access point data. Curr
 To make use of this you'll need to create an account on wigle.net (<http://wigle.net/gps/gps/main/register>). The following code example shows how to authenticate against the API and perform a simple search.
 
 ```ruby
-require "wigle\_api"
+require "wigle_api"
 
 WigleApi.login("your-username", "your-password")
 WigleApi.where(ssid: "linksys").each do |ap|
