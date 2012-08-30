@@ -24,6 +24,6 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency "nokogiri"
   gem.add_development_dependency "rspec"
 
-  spec.required_ruby_version = '>= 1.9.2'
+  gem.required_ruby_version = '>= 1.9.2'
 end
 
