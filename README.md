@@ -4,14 +4,16 @@ This gem was written to make use of WiGLE.net's wireless access point data. Curr
 ## Usage
 To make use of this you'll need to create an account on wigle.net (<http://wigle.net/gps/gps/main/register>). The following code example shows how to authenticate against the API and perform a simple search.
 
-   require "wigle\_api"
+```ruby
+require "wigle\_api"
 
-   WigleApi.login("your-username", "your-password")
-   WigleApi.where(ssid: "linksys").each do |ap|
-     puts ap[:ssid] + ap[:statecode]
-   end
+WigleApi.login("your-username", "your-password")
+WigleApi.where(ssid: "linksys").each do |ap|
+  puts ap[:ssid] + ap[:statecode]
+end
 
-   WigleApi.where(ssid: "linksys").offset(200).results
+WigleApi.where(ssid: "linksys").offset(200).results
+```
 
 Results are returned as an array of hashes with symbols for keys. Each hash has all of the available fields that WiGLE returns in their search view. Only 100 results will be returned at a time though you can use the "pagestart" search value or the .offset(num) chained methods to iterate through more results. There unfortunately isn't a way to count the total number of results from a query at this time.
 
