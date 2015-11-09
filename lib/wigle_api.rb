@@ -19,7 +19,7 @@ require "wigle_api/scraper/search"
 
 module WigleApi
   WIGLE_URI       = URI.parse("https://wigle.net/")
-  WIGLE_LOGIN_URL = "/gps/gps/main/login"
+  WIGLE_LOGIN_URL = "/login"
   WIGLE_QUERY_URL = "/gps/gps/main/confirmquery/"
 
   def self.login(username, password)
