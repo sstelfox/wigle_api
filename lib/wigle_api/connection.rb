@@ -7,22 +7,21 @@ module WigleApi
     end
 
     def initialize
-      @connection = Net::HTTP.new(WIGLE_URI.host, WIGLE_URI.port)
-      @connection.ca_file = "/etc/pki/tls/certs/ca-bundle.crt"
+      @connection = Net::HTTP.new(WIGLE_ENDPOINT.host, WIGLE_ENDPOINT.port)
       @connection.use_ssl = true
-      @connection.verify_mode = OpenSSL::SSL::VERIFY_PEER
-      
+      @connection.verify_mode = OpenSSL::SSL::VERIFY_NONE
+
       @logged_in = false
     end
 
-    def login(username, password)
+    def post_login(username, password)
       return true if @logged_in
 
       login_form_data = {
-        "credential_0" => username,
-        "credential_1" => password,
-        "destination" => "/gps/gps/main",
-        "noexpire" => "on",
+        'credential_0' => username,
+        'credential_1' => password,
+        'noexpire' => 'off',
+        'destination' => '/',
       }
 
       response = post(WIGLE_LOGIN_URL, login_form_data)
@@ -35,25 +34,53 @@ module WigleApi
       @logged_in = true
     end
 
-    def search(data)
-      raise NotLoggedIn unless @logged_in
-
-      response = post(WIGLE_QUERY_URL, data)
+    def get_current_user
+      JSON.parse(get(WIGLE_USER_URL, {}).body)
     end
 
-    private
+    def get_json_search(data)
+      raise NotLoggedIn unless @logged_in
+      response = self.get(WIGLE_INDEX_URL, data)
+    end
 
-    def post(path, data)
-      request = Net::HTTP::Post.new(path)
-      request.initialize_http_header({
-        "User-Agent" => "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.1 (KHTML, like Gecko) Chrome/21.0.1180.57 Safari/537.1"
-      })
+    def get_json_location(data)
+      raise NotLoggedIn unless @logged_in
+      response = self.get(WIGLE_SHOW_URL, data)
+    end
+
+    # private
+
+    def http_request(type, path, data)
+      puts "http_request: type=#{type}, path=#{path}, data=#{data}"
+      request = if type.to_sym == :post
+                  Net::HTTP::Post.new(path)
+                elsif type.to_sym == :get
+                  Net::HTTP::Get.new(path)
+                else
+                  raise "Unknown http type!"
+                end
+
+      request.initialize_http_header(
+          {
+              "User-Agent" => "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:42.0) Gecko/20100101 Firefox/42.0"
+          })
+
       request.set_form_data(data)
       request.add_field("Cookie", @auth_cookie) if @auth_cookie
 
-      @connection.start do |http|
+      response = @connection.start do |http|
         http.request(request)
       end
+      puts response.inspect
+      response
+    end
+
+    def post(path, data)
+      self.http_request(:post, path, data)
+    end
+
+    def get(path, data)
+      self.http_request(:get, path, data)
     end
   end
 end

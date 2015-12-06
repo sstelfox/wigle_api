@@ -6,8 +6,8 @@ require "wigle_api/version"
 Gem::Specification.new do |gem|
   gem.name              = "wigle_api"
   gem.version           = WigleApi::VERSION
-  gem.authors           = ["Sam Stelfox"]
-  gem.email             = ["sstelfox+rubygems@bedroomprogrammers.net"]
+  gem.authors           = ["Sam Stelfox", "Patryk Ptasinski"]
+  gem.email             = ["sstelfox+rubygems@bedroomprogrammers.net", "rubygithub@ipepe.pl"]
   gem.homepage          = "https://github.com/sstelfox/wigle_api"
   gem.license           = "MIT"
 
@@ -22,6 +22,8 @@ Gem::Specification.new do |gem|
   gem.require_paths     = ["lib"]
 
   gem.add_runtime_dependency "nokogiri"
+  gem.add_runtime_dependency "deepstruct"
+  gem.add_runtime_dependency "json"
   gem.add_development_dependency "rspec"
 
   gem.required_ruby_version = '>= 1.9.2'
